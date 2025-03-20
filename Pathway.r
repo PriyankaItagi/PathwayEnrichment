@@ -1,14 +1,15 @@
+# necessary libraries
 library(shiny)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(ggplot2)
 library(DT)
-library(shinythemes)  # For better themes
+library(shinythemes)  
 
-# Define UI for application
+# UI 
 ui <- fluidPage(
   
-  # Apply a modern theme
+
   theme = shinytheme("flatly"),
   
   # Application title
@@ -66,7 +67,7 @@ ui <- fluidPage(
   )
 )
 
-# Define server logic
+# server 
 server <- function(input, output, session) {
   
   # Reactive expression to perform enrichment analysis
@@ -77,7 +78,7 @@ server <- function(input, output, session) {
     enrichGO(genes, OrgDb = input$organism_db, ont = input$ontology)
   })
   
-  # Output: Enrichment plot
+  # Enrichment plot
   output$enrichment_plot <- renderPlot({
     req(enrichment_result())
     dotplot(enrichment_result(), showCategory = 20, font.size = 12) +
@@ -85,7 +86,7 @@ server <- function(input, output, session) {
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
-  # Output: Enrichment results table
+  # Enrichment results table
   output$enrichment_table <- renderDT({
     req(enrichment_result())
     datatable(as.data.frame(enrichment_result()), 
